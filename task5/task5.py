@@ -19,7 +19,7 @@ def readxls(path):
 #读取txt文本,返回句子列表
 def readtxt(path):
     with codecs.open(path,"r",encoding="utf-8") as f:
-        s = f.read()
+        s = f.read().strip()
     #对文本分句，存储为list
     cut_list = ".,?。，？"
     def Findtoken(cut_list,char):
@@ -43,43 +43,7 @@ def readtxt(path):
     lines_list = cut(cut_list,s)
     return lines_list
 
-#最大逆向匹配分词
-def cut_word(sentences_list,word_dic,stop_word):
-    word_cut = []
-    #最大词长数为词典中最长的词数
-    max_length = max(len(word) for word in word_dic)
-    for sentence in sentences_list:
-        sentence=sentence.strip()
-        # 单句中的字个数
-        n = len(sentence)
-        word_cut_list=[]
-        # 由于数组下标是由0开始，所以n值减一
-        n = n - 1
-        # 当句子没有切分完
-        while n >= 0:
-            matched = False
-            for i in range(max_length, 0, -1):
-                if sentence[n-i:n] in word_dic:
-                    matched = True
-                    if sentence[n-i:n] in stop_word:
-                        n=n-i
-                        break
-                    else:
-                        word_cut_list.append(sentence[n-i:n])
-                        n=n-i
-                        break
-                if sentence[n-i:n] in stop_word:
-                    matched = True
-                    n = n-i
-                    break
-            if not matched:
-                word_cut_list.append(sentence[n])
-                n=n-i
-        word_cut_list.reverse()
-        words = "/".join(word_cut_list)
-        word_cut.append(words)
-    cut_content ="".join(word_cut)
-    return cut_content
+
 
 #创建保存分词结果的文件夹
 def buildfolder(path):
